@@ -92,6 +92,8 @@ abstract class Json
 
 class ReportsService extends BaseApplicationComponent
 {
+    private $types;
+    
     public function getReportById ($id = null)
     {
         if ( $id ) {
@@ -107,13 +109,16 @@ class ReportsService extends BaseApplicationComponent
 
     public function getAllReports ()
     {
-        return ReportsRecord::model()->findAll();
+        $records = ReportsRecord::model()->findAll();
+
+        return ReportsModel::populateModels($records);
     }
 
     public function run ($id = null)
     {
         $report           = $this->getReportById($id);
-        $report->runCount = $report->runCount + 1;
+        //$report->runCount = $report->runCount + 1;
+        $report->lastRun = new DateTime();
         $this->saveReport($report);
 
         return $this->parseReport($report);
@@ -122,7 +127,7 @@ class ReportsService extends BaseApplicationComponent
     public function exportCsv ($id = null)
     {
         $report           = $this->getReportById($id);
-        $report->runCount = $report->runCount + 1;
+        $report->lastRun = new DateTime();
         $this->saveReport($report);
 
         $data = $this->parseReport($report);
@@ -142,7 +147,11 @@ class ReportsService extends BaseApplicationComponent
 
     public function parseReport (ReportsModel $report)
     {
-        $result  = craft()->templates->renderString($report->content);
+        if($report->type == 'manual'){
+            $result  = craft()->templates->renderString($report->content);
+        }else{
+            $result  = craft()->templates->renderString($this->getReportTemplate($report));
+        }
         $matches = [ ];
 
         if ( preg_match('/(%report%(.+)%endreport%)/um', $result, $matches) ) {
@@ -177,15 +186,21 @@ class ReportsService extends BaseApplicationComponent
         }
 
         $record->name     = $report->name;
-        $record->handle   = $report->handle;
+        $record->type   = $report->type;
         $record->content  = $report->content;
-        $record->runCount = $report->runCount;
+        $record->options = $report->options;
+        $record->lastRun = $report->lastRun;
 
         if ( $record->save() ) {
             return true;
         }
 
         return false;
+    }
+
+    public function deleteReportById($id)
+    {
+        ReportsRecord::model()->deleteByPk($id);
     }
 
     private function removeBOM ($data)
@@ -195,5 +210,57 @@ class ReportsService extends BaseApplicationComponent
         }
 
         return $data;
+    }
+
+
+    public function getTypes()
+    {
+        if(!$this->types){
+
+            $registered = craft()->plugins->call('registerReports');
+
+            foreach($registered as $plugin => $report){
+                foreach($report as $key => $value){
+                    $this->types[$key] = ['path'=>$value, 'plugin'=>$plugin];
+                }
+            }
+
+        }
+
+        return $this->types;
+    }
+
+    public function getOptions($type)
+    {
+        if($type == 'manual'){
+            return null;
+        }
+        
+        $types = $this->getTypes();
+        $type = $types[$type];
+
+        $oldPath = craft()->path->getTemplatesPath();
+        $newPath = craft()->path->getPluginsPath().$type['plugin'].'/templates';
+        craft()->path->setTemplatesPath($newPath);
+        $options = craft()->templates->render($type['path'].'/settings');
+        craft()->path->setTemplatesPath($oldPath);
+
+        return $options;
+    }
+
+    public function getReportTemplate($report)
+    {
+        $types = $this->getTypes();
+        $type = $types[$report->type];
+
+        $oldPath = craft()->path->getTemplatesPath();
+        $newPath = craft()->path->getPluginsPath().$type['plugin'].'/templates';
+        craft()->path->setTemplatesPath($newPath);
+        $results = craft()->templates->render($type['path'].'/results', [
+            'options' => $report->options,
+        ]);
+        craft()->path->setTemplatesPath($oldPath);
+
+        return $results;
     }
 }

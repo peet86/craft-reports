@@ -31,9 +31,10 @@ class ReportsRecord extends BaseRecord
     {
         return array(
             'name'     => array( AttributeType::String, 'default' => '' ),
-            'handle'   => array( AttributeType::Slug, 'default' => '' ),
             'content'  => array( AttributeType::String, 'column' => ColumnType::Text ),
-            'runCount' => array( AttributeType::Number, 'default' => 0 ),
+            'type'     => array( AttributeType::String, 'default' => '' ),
+            'options'  => array( AttributeType::Mixed),
+            'lastRun' => array( AttributeType::DateTime, 'default' => null),
         );
     }
 

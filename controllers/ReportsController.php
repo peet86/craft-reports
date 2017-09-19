@@ -27,8 +27,11 @@ class ReportsController extends BaseController
     public function actionIndex ()
     {
         $reports = craft()->reports->getAllReports();
+        $types = craft()->reports->getTypes();
+        
         $this->renderTemplate('reports/Reports_Index', [
             'reports' => $reports,
+            'types' => $types,
         ]);
     }
 
@@ -41,8 +44,13 @@ class ReportsController extends BaseController
             $report = $variables['report'];
         }
 
+        $report->type = $variables['reportType'];
+        
+        $settings = craft()->reports->getOptions($report->type);
+
         $this->renderTemplate('reports/Reports_Edit', [
             'report' => $report,
+            'settings' => $settings,
         ]);
     }
 
@@ -60,8 +68,11 @@ class ReportsController extends BaseController
             $this->redirect('reports');
         }
 
+        $settings = craft()->reports->getOptions($report->type);
+
         $this->renderTemplate('reports/Reports_Edit', [
             'report' => $report,
+            'settings' => $settings,
         ]);
     }
 
@@ -105,8 +116,9 @@ class ReportsController extends BaseController
     {
         $id      = craft()->request->getParam('id');
         $name    = craft()->request->getParam('name');
-        $handle  = craft()->request->getParam('handle');
+        $type  = craft()->request->getParam('type');
         $content = craft()->request->getParam('content');
+        $options = craft()->request->getParam('options');
 
         if ( $id ) {
             $report = craft()->reports->getReportById($id);
@@ -116,8 +128,9 @@ class ReportsController extends BaseController
         }
 
         $report->name    = $name;
-        $report->handle  = $handle;
+        $report->type  = $type;
         $report->content = $content;
+        $report->options = $options;
 
         $result = craft()->reports->saveReport($report);
 
@@ -131,5 +144,16 @@ class ReportsController extends BaseController
         }
 
         $this->redirect('reports');
+    }
+
+    public function actionDeleteReport()
+    {
+        $this->requirePostRequest();
+        $this->requireAjaxRequest();
+
+        $id = craft()->request->getRequiredPost('id');
+
+        craft()->reports->deleteReportById($id);
+        $this->returnJson(['success' => true]);
     }
 }

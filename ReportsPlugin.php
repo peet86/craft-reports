@@ -101,7 +101,7 @@ class ReportsPlugin extends BasePlugin
     {
         return [
             'reports'                        => [ 'action' => 'reports/index' ],
-            'reports/new'                    => [ 'action' => 'reports/new' ],
+            'reports/new/(?P<reportType>[-\w]+)'  => [ 'action' => 'reports/new' ],
             'reports/edit/(?P<reportId>\d+)' => [ 'action' => 'reports/edit' ],
             'reports/run/(?P<reportId>\d+)'  => [ 'action' => 'reports/run' ],
             'reports/export/(?P<reportId>\d+)'  => [ 'action' => 'reports/export' ],

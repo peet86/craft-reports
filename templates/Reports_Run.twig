@@ -11,7 +11,8 @@
 
 {% set extraPageHeaderHtml %}
     <div class="buttons right">
-        <a href="{{ url('reports/edit/' ~ result.id) }}" class="submit btn pencil icon">{{ "Edit report"|t }}</a>
+        <a href="{{ url('reports/edit/' ~ result.id) }}" class="btn" data-icon="settings">{{ "Edit"|t }}</a>
+        <a href="{{ url('reports/export/' ~ result.id) }}" class="submit btn" data-icon="download">{{ "Export"|t }}</a>
     </div>
 {% endset %}
 

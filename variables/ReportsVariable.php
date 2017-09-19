@@ -63,4 +63,41 @@ class ReportsVariable
 
         return $newRows;
     }
+
+
+    public function getReportTypes()
+    {
+        //$oldPath = craft()->templates->getTemplatesPath();
+        //craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
+
+        $types = IOHelper::getFolders(craft()->path->getSiteTemplatesPath().'reports/');
+$types = 'bob';
+        print_r($types);
+
+        //craft()->templates->setTemplatesPath($oldPath);
+
+        return $types;
+    }
+
+    public function forms($macro, array $args)
+    {
+        // Get the current template path
+        $originalPath = craft()->path->getTemplatesPath();
+        
+        // Point Twig at the CP templates
+        craft()->path->setTemplatesPath(craft()->path->getCpTemplatesPath());
+
+        // Render the macro.
+        $html = craft()->templates->renderMacro('_includes/forms', $macro, array($args));
+
+        // Restore the original template path
+        craft()->path->setTemplatesPath($originalPath);
+
+        return TemplateHelper::getRaw($html);
+    }
+
+    public function userGroups()
+    {
+        return craft()->userGroups->allGroups;
+    }
 }

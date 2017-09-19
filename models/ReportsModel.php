@@ -23,9 +23,10 @@ class ReportsModel extends BaseModel
         return array_merge(parent::defineAttributes(), array(
             'id'       => array( AttributeType::Number, 'default' => null ),
             'name'     => array( AttributeType::String, 'default' => '' ),
-            'handle'   => array( AttributeType::Slug, 'default' => '' ),
             'content'  => array( AttributeType::String, 'default' => '' ),
-            'runCount' => array( AttributeType::Number, 'default' => 0 ),
+            'type'  => array( AttributeType::String, 'default' => 'manual' ),
+            'options'  => array( AttributeType::Mixed, 'default' => null),
+            'lastRun' => array( AttributeType::DateTime),
         ));
     }
 

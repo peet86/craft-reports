@@ -3,7 +3,22 @@
 
 {% set extraPageHeaderHtml %}
     <div class="buttons right">
-        <a href="{{ url('reports/new') }}" class="submit btn add icon">{{ "New report"|t }}</a>
+        <div class="newwidget btngroup">
+            <div id="newwidgetmenubtn" class="btn submit menubtn add icon">{{ 'New report'|t }}</div>
+            <div class="menu newwidgetmenu">
+            
+                <ul>
+                    <li><a href="{{ url('reports/new/manual') }}" data-type="manual" data-name="manual">Manual</a></li>
+                    {% for type, report in types %}
+                        <li>
+                            <a href="{{ url('reports/new/'~type) }}" data-type="{{ type }}" data-name="{{ type }}">
+                                {{ type|capitalize }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
 {% endset %}
 
@@ -17,8 +32,8 @@
         <table id="js-reports" class="data fullwidth collapsible">
             <thead>
             <th scope="col">{{ "Name"|t }}</th>
-            <th scope="col">{{ "Handle"|t }}</th>
-            <th scope="col">{{ "Run count"|t }}</th>
+            <th scope="col">{{ "Type"|t }}</th>
+            <th scope="col">{{ "Last Run"|t }}</th>
             <td class="thin"></td>
             <td class="thin"></td>
             <td class="thin"></td>
@@ -28,12 +43,12 @@
                 <tr data-id="{{ report.id }}" data-name="{{ report.name|t }}">
                     <th scope="row" data-title="{{ 'Name'|t }}"><a href="{{ url('reports/edit/' ~ report.id) }}">{{ report.name|t }}</a>
                     </th>
-                    <td data-title="{{ 'Handle'|t }}"><code>{{ report.handle }}</code></td>
-                    <td data-title="{{ 'Run count'|t }}">
-                        {{ report.runCount }}
+                    <td data-title="{{ 'Type'|t }}"><code>{{ report.type }}</code></td>
+                    <td data-title="{{ 'Last Run'|t }}">
+                        {{ report.lastRun is not null ? report.lastRun|date('d/m/Y G:i') : '' }}
                     </td>
-                    <td class="thin"><a class="icon run" title="{{ 'Run'|t }}" href="{{ url('reports/run/' ~ report.id) }}">Run</a></td>
-                    <td class="thin"><a class="icon export" title="{{ 'Export'|t }}" href="{{ url('reports/export/' ~ report.id) }}">Export</a></td>
+                    <td class="thin"><a class="btn" title="{{ 'View'|t }}" href="{{ url('reports/run/' ~ report.id) }}" data-icon="view">View</a></td>
+                    <td class="thin"><a class="submit btn icon" title="{{ 'Export'|t }}" href="{{ url('reports/export/' ~ report.id) }}" data-icon="download">Export</a></td>
                     <td class="thin"><a class="delete icon" title="{{ 'Delete'|t }}" role="button"></a></td>
                 </tr>
             {% endfor %}
