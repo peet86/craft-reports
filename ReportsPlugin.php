@@ -46,7 +46,7 @@ class ReportsPlugin extends BasePlugin
      */
     public function getDocumentationUrl ()
     {
-        return 'https://superbig.co/plugins/reports';
+        return 'https://github.com/samuelbirch/reports';
     }
 
     /**
@@ -54,7 +54,7 @@ class ReportsPlugin extends BasePlugin
      */
     public function getReleaseFeedUrl ()
     {
-        return 'https://superbig.co/plugins/reports/feed';
+        return 'https://github.com/samuelbirch/reports/releases.json';
     }
 
     /**
@@ -62,7 +62,7 @@ class ReportsPlugin extends BasePlugin
      */
     public function getVersion ()
     {
-        return '1.0.1';
+        return '1.1.0';
     }
 
     /**
@@ -78,7 +78,7 @@ class ReportsPlugin extends BasePlugin
      */
     public function getDeveloper ()
     {
-        return 'Superbig';
+        return 'Samuel Birch';
     }
 
     /**
@@ -86,7 +86,7 @@ class ReportsPlugin extends BasePlugin
      */
     public function getDeveloperUrl ()
     {
-        return 'https://superbig.co';
+        return 'https://github.com/samuelbirch';
     }
 
     /**
