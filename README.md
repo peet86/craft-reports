@@ -44,6 +44,42 @@ List all users in a specific user group that have logged in within the last 30 d
 
 The result is available in the control panel, or as a CSV export.
 
+
+You can register report types from other plugins and use templates for both options and results:
+
+```twig
+public function registerReports()
+{
+    $types = [];
+    $folders = IOHelper::getFolders(craft()->path->getPluginsPath().'tester/templates/reports/');
+    
+    foreach($folders as $folder){
+        $name = IOHelper::getFolderName($folder, false);
+        $types[$name] = 'reports/'.$name;
+    }
+    
+    return $types;
+}
+```
+
+Use the reports forms variable to access cp forms macros
+```twig
+{{ craft.reports.forms('dateTimeField', {
+	id: 'startDate',
+    label: "Start Date"|t,
+    name: 'options[startDate]',
+    value: options.startDate
+}) }}
+```
+The options variable is now available in the results.twig 
+
+folder structure:
+templates
+    reports
+        reportType
+            results.twig
+            settings.twig
+
 ## Reports Roadmap
 
 * Show error if there is something wrong with the template
