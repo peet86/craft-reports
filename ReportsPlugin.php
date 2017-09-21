@@ -54,7 +54,7 @@ class ReportsPlugin extends BasePlugin
      */
     public function getReleaseFeedUrl ()
     {
-        return 'https://github.com/samuelbirch/reports/feed';
+        return 'https://github.com/samuelbirch/reports/releases.json';
     }
 
     /**
