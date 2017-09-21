@@ -46,11 +46,11 @@ class ReportsController extends BaseController
 
         $report->type = $variables['reportType'];
         
-        $settings = craft()->reports->getOptions($report->type);
+        $options = craft()->reports->getOptions($report->type);
 
         $this->renderTemplate('reports/Reports_Edit', [
             'report' => $report,
-            'settings' => $settings,
+            'options' => $options,
         ]);
     }
 
@@ -68,11 +68,11 @@ class ReportsController extends BaseController
             $this->redirect('reports');
         }
 
-        $settings = craft()->reports->getOptions($report->type);
+        $options = craft()->reports->getOptions($report->type);
 
         $this->renderTemplate('reports/Reports_Edit', [
             'report' => $report,
-            'settings' => $settings,
+            'options' => $options,
         ]);
     }
 
