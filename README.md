@@ -74,20 +74,12 @@ Use the reports forms variable to access cp forms macros
 The options variable is now available in the results.twig 
 
 folder structure:
+```twig
 templates
     reports
         reportType
             results.twig
             settings.twig
+```
 
-## Reports Roadmap
-
-* Show error if there is something wrong with the template
-* Add helpers for getting data from query results
-* Make it possible to include templates from the `templates` directory
-* Charts
-* Permissions
-* E-mail digests
-* Slack digests
-
-Brought to you by [Superbig](https://superbig.co)
+Based on the work by [Superbig](https://superbig.co)
