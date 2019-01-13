@@ -1,11 +1,15 @@
 {
-	"name": "sjelfull/reports",
-	"description": "Report all the things",
+	"name": "peet86/reports",
+	"description": "Reports for Craft 3",
 	"type": "craft-plugin",
 	"authors": [
 		{
 			"name": "Superbig",
 			"homepage": "https://superbig.co"
+		},
+		{
+			"name": "Peter Varga",
+			"homepage": "http://petervar.ga"
 		}
 	],
 	"require": {
